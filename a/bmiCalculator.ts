@@ -41,7 +41,4 @@ const calculateBmi = (a: number, b: number): string => {
     }
 };
 
-export default  {
-    parseArguments,
-    calculateBmi
-};
+export default  { parseArguments, calculateBmi };
