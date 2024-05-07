@@ -70,3 +70,5 @@ const calculateExercises = (a: number[] , b: number) : result => {
     }
     console.log(errorMessage);
   }
+
+  export default  { calculateExercises, parseArgs };

@@ -1,5 +1,6 @@
 import express from 'express';
-import  bmiCalculator   from './bmiCalculator';
+import  bmiCalculator from './bmiCalculator';
+import  exerciseCalculator from './exerciseCalculator';
 import { isNotNumber } from "./utils";
 const app = express();
 
@@ -21,6 +22,15 @@ app.get(`/bmi`, (req, res) => {
               });
         }
 
+});
+
+app.post('/exercises', (_req,res)=> {
+    const reqData = {
+        daily_exercises: [1, 0, 2, 0, 3, 0, 2.5],
+        target: 2.5
+        };
+    const results = exerciseCalculator.calculateExercises(reqData.daily_exercises , reqData.target)  
+    res.status(200).json({ message: 'Hardcoded data sent successfully', data: results });
 });
 
 const PORT = 3003;
