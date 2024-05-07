@@ -20,7 +20,7 @@ interface BodyParams {
   
   const calculateBmi = (a: number, b: number) : string => {
     const bmi = b / (a *0.01)**2
-    switch(true ) {
+    switch(true) {
       case (bmi < 16.0) :
         return 'Underweight (Severe thinness) '
       case (bmi > 16.0 && bmi < 16.9):
@@ -44,7 +44,7 @@ interface BodyParams {
   
   try {
     const { height, weight } = parseArguments(process.argv);
-    calculateBmi(height, weight);
+    console.log(calculateBmi(height, weight));
   } catch (error: unknown) {
     let errorMessage = 'Something bad happened.'
     if (error instanceof Error) {
@@ -52,5 +52,3 @@ interface BodyParams {
     }
     console.log(errorMessage);
   }
-
-  console.log(calculateBmi(180, 74))
