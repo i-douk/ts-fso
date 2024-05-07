@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node",
-    "bmiCalculator" : "ts-node bmiCalculator.ts",
-    "exerciseCalculator" : "ts-node exerciseCalculator.ts"
+    "bmiCalculator": "ts-node bmiCalculator.ts",
+    "exerciseCalculator": "ts-node exerciseCalculator.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.10"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
   }
 }
