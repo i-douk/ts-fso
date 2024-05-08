@@ -1,12 +1,17 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import  bmiCalculator from './bmiCalculator';
-import  exerciseCalculator from './exerciseCalculator';
+import  exerciseCalculator, { exerciseValues, result } from './exerciseCalculator';
 import { isNotNumber } from "./utils";
 const app = express();
+app.use(bodyParser.json());
+
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack');
 });
+
+// BMI Calculator
 app.get(`/bmi`, (req, res) => {
         const { height , weight} = req.query;
         if(!isNotNumber(height) && !isNotNumber(weight)) {
@@ -24,13 +29,21 @@ app.get(`/bmi`, (req, res) => {
 
 });
 
-app.post('/exercises', (_req,res)=> {
-    const reqData = {
-        daily_exercises: [1, 0, 2, 0, 3, 0, 2.5],
-        target: 2.5
-        };
-    const results = exerciseCalculator.calculateExercises(reqData.daily_exercises , reqData.target)  
-    res.status(200).json({ message: 'Hardcoded data sent successfully', data: results });
+//ExercicesCalculator
+app.post('/exercises', (req, res) => {
+    console.log(req.body)
+    try {
+        const { daily_exercises, target }: exerciseValues = req.body;
+        if (!req.body || !daily_exercises || !Array.isArray(daily_exercises) || !target || typeof target !== 'number')
+            {
+             throw new Error("Malformatted parameters");
+            }
+
+        const results: result = exerciseCalculator.calculateExercises(daily_exercises, target);
+        res.status(200).json({ data: results });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
 const PORT = 3003;

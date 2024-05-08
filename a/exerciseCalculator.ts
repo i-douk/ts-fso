@@ -1,4 +1,4 @@
-interface result {
+export interface result {
     numberOfDays : number;
     numberOfTrainingDays : number;
     targetValue : number;
@@ -8,8 +8,8 @@ interface result {
     ratingDescription :string
   }
 
-interface exerciseValues {
-    dailyExercices : number[];
+export interface exerciseValues {
+    daily_exercises : number[];
     target: number
 }
 
@@ -20,10 +20,10 @@ const parseArgs = (args: string[]): exerciseValues => {
         const daysArray  = args.slice(3,args.length-2);
         const targetValue = Number(args[(args.length)-1]);
         return {
-            dailyExercices : daysArray.map(Number),
+          daily_exercises : daysArray.map(Number),
             target: targetValue
         };
-    }else {
+    } else {
         throw new Error('Provided values were not numbers!');
     }
 };
@@ -61,8 +61,8 @@ const calculateExercises = (a: number[] , b: number) : result => {
   };
   
   try {
-    const { dailyExercices , target } = parseArgs(process.argv);
-    console.log(calculateExercises(dailyExercices, target));
+    const { daily_exercises , target } = parseArgs(process.argv);
+    console.log(calculateExercises(daily_exercises, target));
   } catch (error: unknown) {
     let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
