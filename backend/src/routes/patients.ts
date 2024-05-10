@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import toNewPatient from '../utils';
+
 import express from 'express';
 import patientService from '../services/patientService';
 
@@ -9,10 +11,9 @@ patientRouter.get('/', (_req, res) => {
 });
 
 patientRouter.post('/', (req, res) => {
-  const { name, dateOfBirth, ssn, occupation, gender } = req.body;
-  const addedPatient = patientService.addPatient(
-   { name, dateOfBirth, ssn, occupation, gender}
-  );
+
+  const newPatient = toNewPatient(req.body);
+  const addedPatient = patientService.addPatient(newPatient);
   res.json(addedPatient);
 });
 
