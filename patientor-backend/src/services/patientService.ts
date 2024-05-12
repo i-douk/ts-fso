@@ -12,6 +12,10 @@ const getNonSensitivePatients = (): PatientWithoutSnn[] => {
     ({ id, name, dateOfBirth, occupation , gender }));
 };
 
+const getPatientById = ( id : string) : Patient[] => {
+  return patientsData.filter(p => p.id === id);
+};
+
 const addPatient = ( entry: AddedPatient ): Patient => {  const newPatient = {
   id: String(id),
   ...entry };
@@ -22,5 +26,6 @@ return newPatient;
 export default {
     getPatients,
     getNonSensitivePatients,
-    addPatient
+    addPatient,
+    getPatientById
 };
