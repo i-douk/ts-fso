@@ -16,3 +16,7 @@ body {
      padding:5px;
      background-color: aliceblue;
 }
+
+.error {
+    color: red;
+}

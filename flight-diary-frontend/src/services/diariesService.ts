@@ -16,9 +16,6 @@ export const createDiaryEntry = async (object: NewDiaryEntry) : Promise<Diary | 
     if (axios.isAxiosError(error)) {
       console.log(error.status);
       console.error(error.response);
-      return error
-    } else {
-      console.error(error);
-    }
+      return error}
   }
 };

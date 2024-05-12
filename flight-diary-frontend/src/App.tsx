@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState , useEffect, SetStateAction } from "react"
 import { getAllDiaries , createDiaryEntry} from "./services/diariesService"
 import { Diary, NewDiaryEntry, Visibility, Weather } from "./types";
-import { AxiosError } from "axios";
+import { isDiary } from "./utils";
+import { isAxiosError } from "axios";
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -40,10 +42,19 @@ const entryCreation = async (event: { preventDefault: () => void; }) => {
     comment: comment
   }
   const returnedEntry = await createDiaryEntry(newEntry)
-  if(returnedEntry as Diary){
+  if(isDiary(returnedEntry)){
     setDiaries(diaries.concat(returnedEntry))
-  } else if (returnedEntry as AxiosError) {
-    setErrorMessage(returnedEntry.data)
+    setComment('')
+    setSelectedVisbility(Visibility.Great)
+    setSelectedWeather(Weather.Sunny)
+    setDate('')
+  } else if (isAxiosError(returnedEntry)) {
+    if (returnedEntry.response && returnedEntry.response.data) {
+      setErrorMessage(JSON.stringify(returnedEntry.response.data));
+    } else {
+      setErrorMessage('Unknown error occurred');
+    }
+    console.log(returnedEntry)
   }
 };
   
