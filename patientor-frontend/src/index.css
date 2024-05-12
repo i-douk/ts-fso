@@ -55,6 +55,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.patient-title {
+  display: flex;
+  justify-content: flex-start;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
