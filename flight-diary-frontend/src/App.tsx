@@ -1,8 +1,10 @@
 import { useState , useEffect, SetStateAction } from "react"
 import { getAllDiaries , createDiaryEntry} from "./services/diariesService"
-import { Diary, Visibility, Weather } from "./types";
+import { Diary, NewDiaryEntry, Visibility, Weather } from "./types";
+import { AxiosError } from "axios";
 
 const App = () => {
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [diaries, setDiaries] = useState<Diary[]>([])
   const [date, setDate] = useState('');
   const [selectedWeather, setSelectedWeather] = useState<Weather>(Weather.Sunny);
@@ -15,7 +17,6 @@ const App = () => {
 
 const handleWeather = (event: React.ChangeEvent<HTMLInputElement>)  => {
   setSelectedWeather(event.target.value as Weather);
-  console.log(selectedWeather)
 };
 
 const handleVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,23 +31,27 @@ useEffect(() => {
   getAllDiaries().then((data: SetStateAction<Diary[]>) => {setDiaries(data)})
 }, [])
 
-const entryCreation = (event: { preventDefault: () => void; }) => {
+const entryCreation = async (event: { preventDefault: () => void; }) => {
   event.preventDefault()
-  const newEntry: Diary = {
-    id: diaries.length + 1,
+  const newEntry: NewDiaryEntry = {
     date: date,
     weather: selectedWeather,
     visibility: selectedVisbility,
     comment: comment
   }
-  createDiaryEntry(newEntry)
-  setDiaries(prevDiaries => [...prevDiaries, newEntry]); 
+  const returnedEntry = await createDiaryEntry(newEntry)
+  if(returnedEntry as Diary){
+    setDiaries(diaries.concat(returnedEntry))
+  } else if (returnedEntry as AxiosError) {
+    setErrorMessage(returnedEntry.data)
+  }
 };
-
   
   return (
     <div>
+      <div className="error">{errorMessage}</div>
       <div>
+        <h3>create new diary entry</h3>
       <form onSubmit={entryCreation}>
         <label htmlFor="date">Select Date:</label><br />
         <input 
@@ -101,8 +106,8 @@ const entryCreation = (event: { preventDefault: () => void; }) => {
       </form>
         <h3>Diary</h3>
         {diaries.map(d=>(
-            <div style={{padding:"2px" , borderWidth:"1px", margin:"5px", borderStyle: "dashed"}} key={d.id}>
-              <p>date : {d.date}</p>
+            <div key={d.id} className="diary-entry">
+              <h4>date : {d.date}</h4>
               <p>weather : {d.weather}</p>
               <p>visibility : {d.visibility}</p>
               <p>comment : {d.comment}</p>
