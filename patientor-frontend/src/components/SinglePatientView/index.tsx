@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
-import {  Entry, Patient } from "../../types";
+import {  Diagnosis, Entry, Patient } from "../../types";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-
+import { useEffect, useState } from "react";
+import diagnosisService from "../../services/diagnoses";
 interface Props {
     patients : Patient[]
   }
@@ -12,6 +13,25 @@ const PatientView = ({ patients } : Props ) => {
     const id = useParams().id;
     const indexOfPatient  = patients.findIndex(p => p.id === id);
     const currPatient  = patients[indexOfPatient];
+    const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+    
+useEffect(() => {
+    const fetchDiagnosesList = async () => {
+        const fetchedDiagnoses = await diagnosisService.getAllDiagnoses();
+        setDiagnoses(fetchedDiagnoses);
+    };
+    void fetchDiagnosesList();
+    }, [diagnoses]);
+
+const findDiagnosis = (d: string) => {
+    const locatedDiagnosis = diagnoses.find(diag => d===diag.code);
+    if (locatedDiagnosis) {
+        return locatedDiagnosis.name;
+    } else {
+        return 'no diagnosis found';
+    }
+};
+
   return (
     <>
         <div>
@@ -28,7 +48,7 @@ const PatientView = ({ patients } : Props ) => {
                 <>
                     <div key={e.id}>{e.date} {e.description}</div>
                     <ul>
-                        {e.diagnosisCodes?.map(c=><li key={c}>{c}</li>)}
+                        {e.diagnosisCodes?.map(c=><li key={c}>{c} {findDiagnosis(c)}</li>)}
                     </ul>
                 </>
         ))}
