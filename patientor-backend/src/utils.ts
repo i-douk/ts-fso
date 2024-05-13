@@ -45,8 +45,9 @@ const toNewPatient = (object : unknown): AddedPatient => {
         dateOfBirth: parseDate(object.dateOfBirth),
         ssn: parseFieldEntry(object.ssn),
         gender: parseGender(object.gender),
-        occupation: parseFieldEntry(object.occupation)
-        };
+        occupation: parseFieldEntry(object.occupation),
+        entries: []
+    };
      return newEntry;
     }
     throw new Error('Incorrect data: a field missing');
